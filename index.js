@@ -1,4 +1,4 @@
-#!/usr/bin/env/ node
+#!/usr/bin/env node
 const fs = require('fs')
 const path = require('path')
 const { createSass } = require('./create-sass-app')
@@ -24,17 +24,13 @@ if (process.argv[2]) {
   USE_CURRENT_DIR = true
 }
 
-// TODO: use chalk to color the output
-console.log('Creating new project in', TARGET_PATH)
-
-// CREATE THE TARGET DIRECTORY
-if (!USE_CURRENT_DIR) {
-  fs.mkdirSync(TARGET_PATH)
-}
-
 createSass(TARGET_PATH)
 
 // CHANGE THE CURRENT DIRECTORY TO THE TARGET DIRECTORY
 if (!USE_CURRENT_DIR) {
-  process.chdir(TARGET_PATH)
+  try {
+    process.chdir(TARGET_PATH)
+  } catch (err) {
+    console.log(`chdir: ${err}`)
+  }
 }
