@@ -13,6 +13,9 @@
   },
   "author": "Kelechi Okoronkwo (Blakcoder)",
   "license": "MIT",
+  "bin": {
+    "create-sass-app": "./index.js"
+  },
   "dependencies": {
     "node-sass": "^7.0.3"
   }
