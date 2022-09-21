@@ -1,4 +1,8 @@
 const fs = require('fs')
+const path = require('path')
+
+// TEMPLATE FOR THE SASS FOLDER
+const SOURCE_DIR = path.join(__dirname, 'src')
 
 const mainDir = `./sass`
 const cssDir = `./css`
@@ -20,6 +24,42 @@ const pathArray = [
   ['themes', ['_pink.scss', '_mint.scss']],
   ['vendors', ['_icons.scss']],
 ]
+
+/**
+ * copies content from the source directory to the target directory
+ * @param {string} source where the files are located
+ * @param {string} target where the files are to be copied to
+ */
+const copyToDirectory = (source, target) => {
+  const content = fs.readdirSync(source)
+
+  content.forEach((file) => {
+    const sourceFile = path.join(source, file)
+    const targetFile = path.join(target, file)
+
+    const stat = fs.statSync(sourceFile)
+
+    if (stat.isFile()) {
+      fs.copyFileSync(sourceFile, targetFile)
+    } else {
+      if (!fs.existsSync(targetFile)) {
+        fs.mkdirSync(targetFile)
+      }
+      copyToDirectory(sourceFile, targetFile)
+    }
+  })
+}
+
+/**
+ * create sass from template source code
+ * @param {string} target while the sass sources to be copied to
+ */
+exports.createSass = (target) => {
+  if (!fs.existsSync(target)) {
+    fs.mkdirSync(target)
+  }
+  copyToDirectory(SOURCE_DIR, target)
+}
 
 const createSass = async () => {
   //CREATE SASS FOLDER
@@ -57,4 +97,7 @@ const createSass = async () => {
   })
 }
 
-createSass()
+// RUN THE FUNCTION ONLY WHEN THE FILE IS RUN
+if (require.main === module) {
+  createSass()
+}
