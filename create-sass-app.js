@@ -4,6 +4,8 @@ const path = require('path')
 // TEMPLATE FOR THE SASS FOLDER
 const SOURCE_DIR = path.join(__dirname, 'src')
 
+// TODO: clean up code to use one`createSass` function
+
 const mainDir = `./sass`
 const cssDir = `./css`
 const pathArray = [
@@ -55,9 +57,16 @@ const copyToDirectory = (source, target) => {
  * @param {string} target while the sass sources to be copied to
  */
 exports.createSass = (target) => {
+  const projectName = path.basename(target)
+
+  // TODO: use chalk to color the output
   if (!fs.existsSync(target)) {
+    console.log(`Creating new project in ${projectName}/`)
     fs.mkdirSync(target)
+  } else {
+    console.log(`Adding sass to ${projectName}/`)
   }
+
   copyToDirectory(SOURCE_DIR, target)
 }
 
